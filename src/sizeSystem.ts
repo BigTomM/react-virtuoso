@@ -110,6 +110,14 @@ function offsetPointParser(point: OffsetPoint) {
   return { index: point.index, value: point }
 }
 
+/**
+ * 从全部的offsetTree中找出当前可视窗口内的片段offsetTree
+ * @param tree
+ * @param startOffset
+ * @param endOffset
+ * @param minStartIndex
+ * @returns
+ */
 export function rangesWithinOffsets(
   tree: Array<OffsetPoint>,
   startOffset: number,
@@ -135,10 +143,13 @@ export function sizeStateReducer(state: SizeState, [ranges, groupIndices, log]: 
   if (ranges.length > 0) {
     log('received item sizes', ranges, LogLevel.DEBUG)
   }
+
   const sizeTree = state.sizeTree
   let offsetTree = state.offsetTree
   let newSizeTree: AANode<number> = sizeTree
   let syncStart = 0
+
+  console.log('sizeStateReducer >> sizeTree', sizeTree)
 
   // We receive probe item results from a group probe,
   // which should always pass an item and a group
@@ -152,6 +163,8 @@ export function sizeStateReducer(state: SizeState, [ranges, groupIndices, log]: 
   } else {
     ;[newSizeTree, syncStart] = insertRanges(newSizeTree, ranges)
   }
+
+  console.log('sizeStateReducer >> newSizeTree', newSizeTree)
 
   if (newSizeTree === sizeTree) {
     return state
@@ -290,6 +303,7 @@ export const sizeSystem = u.system(
           return totalCount < lastIndex
         }),
         u.map(([totalCount, { lastIndex, lastSize }]) => {
+          console.log('sizeStateReducer >> totalCount -->', lastSize) // 首次不会执行到这
           return [
             {
               startIndex: totalCount,

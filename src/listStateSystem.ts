@@ -27,6 +27,13 @@ export interface ListState {
   totalCount: number
 }
 
+/**
+ * 第一个元素是从这里跑出来的！！！就是空sizeTree的时候会先来这里生成list中的第一个不知道size的探针item，从而引出剩余的item
+ * @param index
+ * @param sizes
+ * @param data
+ * @returns
+ */
 function probeItemSet(index: number, sizes: SizeState, data: Data) {
   if (hasGroups(sizes)) {
     const itemIndex = originalIndexFromItemIndex(index, sizes)
@@ -182,6 +189,7 @@ export const listStateSystem = u.system(
             }
 
             if (empty(sizeTree)) {
+              // 第一个item在这里被添加
               return buildListState(probeItemSet(initialTopMostItemIndex, sizesValue, data), [], totalCount, sizesValue, firstItemIndex)
             }
 
@@ -208,12 +216,15 @@ export const listStateSystem = u.system(
             // This is a condition to be evaluated past the probe check, do not merge
             // with the totalCount check above
             if (!scrolledToInitialItem) {
+              // console.log('initialTopMostItemIndex2223', initialTopMostItemIndex)
+
               return buildListState([], topItems, totalCount, sizesValue, firstItemIndex)
             }
 
             const minStartIndex = topItemsIndexes.length > 0 ? topItemsIndexes[topItemsIndexes.length - 1] + 1 : 0
 
             const offsetPointRanges = rangesWithinOffsets(offsetTree, startOffset, endOffset, minStartIndex)
+            // console.log('listStateSystem >> offsetPointRanges', offsetPointRanges)
             if (offsetPointRanges.length === 0) {
               return null
             }
@@ -249,6 +260,8 @@ export const listStateSystem = u.system(
                 }
               }
             })
+
+            console.log('sizeStateReducer >> items = u.tap', items)
 
             return buildListState(items, topItems, totalCount, sizesValue, firstItemIndex)
           }

@@ -14,7 +14,10 @@ export const initialTopMostItemIndexSystem = u.system(
       u.pipe(
         didMount,
         u.withLatestFrom(initialTopMostItemIndex),
-        u.filter(([_, index]) => index !== 0),
+        u.filter(([_, index]) => {
+          // console.log('initialTopMostItemIndex11', index)
+          return index !== 0
+        }),
         u.mapTo(false)
       ),
       scrolledToInitialItem

@@ -29,6 +29,8 @@ export default function useChangedListContentsSizes(
       ? scrollContainerStateCallback([Math.max(scrollTop, 0), customScrollParent.scrollHeight])
       : scrollContainerStateCallback([Math.max(scrollTop, 0), scrollableElement.scrollHeight])
     if (ranges !== null) {
+      console.log('sizeStateReducer001 >> ranges', ranges)
+
       callback(ranges)
     }
   }, enabled)
@@ -40,6 +42,8 @@ function getChangedChildSizes(children: HTMLCollection, itemSize: SizeFunction, 
   if (length === 0) {
     return null
   }
+  // 每次都会先加载第一个child
+  // console.log('sizeStateReducer >> getChangedChildSizes', children.length)
 
   const results: SizeRange[] = []
 
