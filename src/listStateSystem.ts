@@ -114,6 +114,7 @@ export function buildListState(
   sizes: SizeState,
   firstItemIndex: number
 ): ListState {
+  // console.log('buildListState SSSS', items)
   const { lastSize, lastOffset, lastIndex } = sizes
   let offsetTop = 0
   let bottom = 0
@@ -128,7 +129,7 @@ export function buildListState(
   const top = offsetTop
   const offsetBottom = total - bottom
 
-  return {
+  const res = {
     items: transposeItems(items, sizes, firstItemIndex),
     topItems: transposeItems(topItems, sizes, firstItemIndex),
     topListHeight: topItems.reduce((height, item) => item.size + height, 0),
@@ -138,6 +139,9 @@ export function buildListState(
     bottom,
     totalCount,
   }
+
+  // console.log('buildListState EEEE', res)
+  return res
 }
 
 export const listStateSystem = u.system(
@@ -184,6 +188,7 @@ export const listStateSystem = u.system(
             const sizesValue = sizes
             const { sizeTree, offsetTree } = sizesValue
 
+            // visibleRange没有更新之前，一直返回EMPTY_LIST_STATE就行了
             if (totalCount === 0 || (startOffset === 0 && endOffset === 0)) {
               return EMPTY_LIST_STATE
             }
@@ -223,6 +228,7 @@ export const listStateSystem = u.system(
 
             const minStartIndex = topItemsIndexes.length > 0 ? topItemsIndexes[topItemsIndexes.length - 1] + 1 : 0
 
+            // 全部找到就完美了，找不到后面会按照最后一个的size乘以数量补全视窗visibleRange
             const offsetPointRanges = rangesWithinOffsets(offsetTree, startOffset, endOffset, minStartIndex)
             // console.log('listStateSystem >> offsetPointRanges', offsetPointRanges)
             if (offsetPointRanges.length === 0) {

@@ -42,6 +42,7 @@ export const sizeRangeSystem = u.system(
           u.duc(scrollTop),
           u.duc(viewportHeight),
           u.duc(headerHeight),
+          // 等到这个值变化才会输出合理的visibleRange
           u.duc(listBoundary, tupleComparator),
           u.duc(overscan),
           u.duc(topListHeight),
@@ -61,6 +62,8 @@ export const sizeRangeSystem = u.system(
             deviation,
             increaseViewportBy,
           ]) => {
+            console.log('visibleRange SSSS', [listTop, listBottom])
+
             const top = scrollTop - deviation
             const stickyHeaderHeight = topListHeight + fixedHeaderHeight
             const headerVisible = Math.max(headerHeight - top, 0)
@@ -72,7 +75,7 @@ export const sizeRangeSystem = u.system(
             listTop += headerHeight
             listBottom += headerHeight
             listBottom -= deviation
-
+            // listTop相当于上一次的状态，scrollTop为目前的状态，比较下就知道滑动的方向了
             if (listTop > scrollTop + stickyHeaderHeight - topViewportAddition) {
               direction = UP
             }
@@ -82,7 +85,7 @@ export const sizeRangeSystem = u.system(
             }
 
             if (direction !== NONE) {
-              return [
+              const res = [
                 Math.max(top - headerHeight - getOverscan(overscan, TOP, direction) - topViewportAddition, 0),
                 top -
                   headerVisible -
@@ -91,6 +94,9 @@ export const sizeRangeSystem = u.system(
                   getOverscan(overscan, BOTTOM, direction) +
                   bottomViewportAddition,
               ] as NumberTuple
+              console.log('visibleRange EEEE', res)
+
+              return res
             }
 
             return null
