@@ -62,7 +62,7 @@ export const sizeRangeSystem = u.system(
             deviation,
             increaseViewportBy,
           ]) => {
-            console.log('visibleRange SSSS', [listTop, listBottom])
+            // console.log('visibleRange SSSS', [listTop, listBottom])
 
             const top = scrollTop - deviation
             const stickyHeaderHeight = topListHeight + fixedHeaderHeight
@@ -94,7 +94,7 @@ export const sizeRangeSystem = u.system(
                   getOverscan(overscan, BOTTOM, direction) +
                   bottomViewportAddition,
               ] as NumberTuple
-              console.log('visibleRange EEEE', res)
+              // console.log('visibleRange EEEE', res)
 
               return res
             }

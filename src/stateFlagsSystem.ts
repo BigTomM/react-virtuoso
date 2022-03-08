@@ -143,21 +143,33 @@ export const stateFlagsSystem = u.system(([{ scrollContainerState, scrollTop, vi
       u.scan(
         (current, [scrollTop, scrollHeight]) => {
           if (current.scrollHeight !== scrollHeight) {
+            console.log('lastJumpDueToItemResize SSS pre', current)
+            console.log('lastJumpDueToItemResize SSS cur', [scrollTop, scrollHeight])
+            let res: {
+              scrollHeight: number
+              jump: number
+              scrollTop: number
+              changed: boolean
+            }
             if (current.scrollTop !== scrollTop) {
-              return {
+              res = {
                 scrollHeight,
                 scrollTop,
                 jump: current.scrollTop - scrollTop,
                 changed: true,
               }
             } else {
-              return {
+              res = {
                 scrollHeight,
                 scrollTop,
                 jump: 0,
                 changed: true,
               }
             }
+
+            console.log('lastJumpDueToItemResize EEEE pre', current)
+            console.log('lastJumpDueToItemResize EEEE cur', [scrollTop, scrollHeight])
+            return res
           } else {
             return {
               scrollTop,

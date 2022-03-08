@@ -149,7 +149,7 @@ export function sizeStateReducer(state: SizeState, [ranges, groupIndices, log]: 
   let newSizeTree: AANode<number> = sizeTree
   let syncStart = 0
 
-  console.log('sizeStateReducer >> sizeTree', sizeTree)
+  // console.log('sizeStateReducer >> sizeTree', sizeTree)
 
   // We receive probe item results from a group probe,
   // which should always pass an item and a group
@@ -164,7 +164,7 @@ export function sizeStateReducer(state: SizeState, [ranges, groupIndices, log]: 
     ;[newSizeTree, syncStart] = insertRanges(newSizeTree, ranges)
   }
 
-  console.log('sizeStateReducer >> newSizeTree', newSizeTree)
+  // console.log('sizeStateReducer >> newSizeTree', newSizeTree)
 
   if (newSizeTree === sizeTree) {
     return state
@@ -303,7 +303,7 @@ export const sizeSystem = u.system(
           return totalCount < lastIndex
         }),
         u.map(([totalCount, { lastIndex, lastSize }]) => {
-          console.log('sizeStateReducer >> totalCount -->', lastSize) // 首次不会执行到这
+          // console.log('sizeStateReducer >> totalCount -->', lastSize) // 首次不会执行到这
           return [
             {
               startIndex: totalCount,

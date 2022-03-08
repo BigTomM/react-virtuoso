@@ -227,7 +227,7 @@ export const Items = React.memo(function VirtuosoItems({ showTopList = false }: 
       'data-test-id': showTopList ? 'virtuoso-top-item-list' : 'virtuoso-item-list',
     },
     (showTopList ? listState.topItems : listState.items).map((item) => {
-      console.log('sizeStateReducer >> listState.items', listState)
+      // console.log('sizeStateReducer >> listState.items', listState)
 
       const index = item.originalIndex!
       const key = computeItemKey(index + firstItemIndex, item.data, context)
