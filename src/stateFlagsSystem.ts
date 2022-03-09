@@ -143,8 +143,7 @@ export const stateFlagsSystem = u.system(([{ scrollContainerState, scrollTop, vi
       u.scan(
         (current, [scrollTop, scrollHeight]) => {
           if (current.scrollHeight !== scrollHeight) {
-            console.log('lastJumpDueToItemResize SSS pre', current)
-            console.log('lastJumpDueToItemResize SSS cur', [scrollTop, scrollHeight])
+            // console.log('lastJumpDueToItemResize SSS cur', [scrollTop, scrollHeight])
             let res: {
               scrollHeight: number
               jump: number
@@ -158,6 +157,8 @@ export const stateFlagsSystem = u.system(([{ scrollContainerState, scrollTop, vi
                 jump: current.scrollTop - scrollTop,
                 changed: true,
               }
+
+              console.log('lastJumpDueToItemResize res.jump', res.jump)
             } else {
               res = {
                 scrollHeight,
@@ -167,8 +168,8 @@ export const stateFlagsSystem = u.system(([{ scrollContainerState, scrollTop, vi
               }
             }
 
-            console.log('lastJumpDueToItemResize EEEE pre', current)
-            console.log('lastJumpDueToItemResize EEEE cur', [scrollTop, scrollHeight])
+            // console.log('lastJumpDueToItemResize EEEE pre', current)
+            // console.log('lastJumpDueToItemResize EEEE cur', [scrollTop, scrollHeight])
             return res
           } else {
             return {
