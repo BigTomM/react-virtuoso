@@ -32,6 +32,7 @@ export const upwardScrollFixSystem = u.system(
                 const onlyItem = items.length === 1
 
                 if (!atStart) {
+                  // 倒着开始
                   for (let index = items.length - 1; index >= 0; index--) {
                     const item = items[index]
 
@@ -42,6 +43,7 @@ export const upwardScrollFixSystem = u.system(
                     }
 
                     if (item.offset !== prevItem.offset || onlyItem) {
+                      // 为正，说明新item底部下移了；为负，说明新item底部上移了
                       newDev = item.offset - prevItem.offset + item.size - prevItem.size
                       break
                     }
@@ -50,6 +52,7 @@ export const upwardScrollFixSystem = u.system(
               }
 
               if (newDev !== 0) {
+                console.log('lastJumpDueToItemResize deviationOffset111', lastJumpDueToItemResize)
                 newDev += lastJumpDueToItemResize
               }
             }
@@ -65,6 +68,7 @@ export const upwardScrollFixSystem = u.system(
           return !scrollingInProgress && scrollTop !== 0 && scrollDirection === UP // && (isAtBottom ? amount > 0 : true)
         }),
         u.map(([[amount], , , , log]) => {
+          console.log('lastJumpDueToItemResize deviationOffset222', amount)
           log('Upward scrolling compensation', { amount }, LogLevel.DEBUG)
           return amount
         })
