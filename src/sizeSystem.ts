@@ -205,6 +205,9 @@ export function sizeStateReducer(state: SizeState, [ranges, groupIndices, log]: 
     prevSize = value
   }
 
+  // console.log('sizeTree', newSizeTree)
+  // console.log('sizeTree offsetTree', offsetTree)
+
   return {
     sizeTree: newSizeTree,
     offsetTree,
@@ -364,6 +367,7 @@ export const sizeSystem = u.system(
           { diff: 0, prev: 0 }
         ),
         u.map((val) => val.diff),
+        // 由多变少才可以！！！
         u.filter((value) => value > 0)
       ),
       unshiftWith
@@ -379,6 +383,7 @@ export const sizeSystem = u.system(
       }
     })
 
+    // 记录这一次的添加量
     // Capture the current list top item before the sizes get refreshed
     const beforeUnshiftWith = u.streamFromEmitter(unshiftWith)
 

@@ -1,4 +1,5 @@
 import * as u from '@virtuoso.dev/urx'
+import { map, pipe, skip } from '@virtuoso.dev/urx'
 import { domIOSystem } from './domIOSystem'
 
 export const UP = 'up' as const
@@ -94,6 +95,7 @@ export const stateFlagsSystem = u.system(([{ scrollContainerState, scrollTop, vi
           scrollTop,
           scrollHeight,
         }
+        console.log('atBottomState SSS', state)
 
         if (isAtBottom) {
           let atBottomBecause: 'SIZE_DECREASED' | 'SCROLLED_DOWN'
@@ -133,6 +135,10 @@ export const stateFlagsSystem = u.system(([{ scrollContainerState, scrollTop, vi
       }, INITIAL_BOTTOM_STATE),
       u.distinctUntilChanged((prev, next) => {
         return prev && prev.atBottom === next.atBottom
+      }),
+      map((value) => {
+        console.log('atBottomState EEEEE', value)
+        return value
       })
     )
   )
@@ -157,8 +163,6 @@ export const stateFlagsSystem = u.system(([{ scrollContainerState, scrollTop, vi
                 jump: current.scrollTop - scrollTop,
                 changed: true,
               }
-
-              console.log('lastJumpDueToItemResize res.jump', res.jump)
             } else {
               res = {
                 scrollHeight,
@@ -167,17 +171,19 @@ export const stateFlagsSystem = u.system(([{ scrollContainerState, scrollTop, vi
                 changed: true,
               }
             }
-
-            // console.log('lastJumpDueToItemResize EEEE pre', current)
-            // console.log('lastJumpDueToItemResize EEEE cur', [scrollTop, scrollHeight])
+            // console.log('lastJumpDueToItemResize res.jump11', res.jump)
             return res
           } else {
-            return {
+            // 没有跳跃之后立马恢复lastJumpDueToItemResize=0
+            const res = {
               scrollTop,
               scrollHeight,
               jump: 0,
               changed: false,
             }
+            // console.log('lastJumpDueToItemResize res.jump22', res.jump)
+
+            return res
           }
         },
         { scrollHeight: 0, jump: 0, scrollTop: 0, changed: false }
@@ -196,17 +202,20 @@ export const stateFlagsSystem = u.system(([{ scrollContainerState, scrollTop, vi
     isAtBottom
   )
 
-  u.subscribe(isAtBottom, (value) => {
+  // u.subscribe(isAtBottom, (value) => {
+  //   setTimeout(() => u.publish(atBottomStateChange, value))
+  // })
+  u.connect(pipe(isAtBottom, skip(2)), (value) => {
     setTimeout(() => u.publish(atBottomStateChange, value))
   })
 
   const scrollDirection = u.statefulStream<ScrollDirection>(DOWN)
 
-  u.subscribe(isAtBottom, (value) => {
-    setTimeout(() => {
-      u.publish(atBottomStateChange, value)
-    })
-  })
+  // u.subscribe(isAtBottom, (value) => {
+  //   setTimeout(() => {
+  //     u.publish(atBottomStateChange, value)
+  //   })
+  // })
 
   u.connect(
     u.pipe(
@@ -232,7 +241,7 @@ export const stateFlagsSystem = u.system(([{ scrollContainerState, scrollTop, vi
 
   u.connect(u.pipe(scrollContainerState, u.throttleTime(50), u.mapTo(NONE)), scrollDirection)
 
-  u.connect(isAtBottom, atBottomStateChange)
+  // u.connect(isAtBottom, atBottomStateChange)
 
   const scrollVelocity = u.statefulStream(0)
 

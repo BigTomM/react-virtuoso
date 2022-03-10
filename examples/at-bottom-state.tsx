@@ -72,6 +72,10 @@ function ChatList({ userId, messages = [], onSend, onReceive, placeholder }: Cha
     onReceive()
   }
 
+  const onBottom = (state : boolean) => {
+    console.log('onBottom state' , state)
+  }
+
   const row = React.useMemo(
     () => (i: number, { message, id,height }: { message: string; id: string ; height? : string }) => {
       const fromUser = id === userId
@@ -92,18 +96,10 @@ function ChatList({ userId, messages = [], onSend, onReceive, placeholder }: Cha
       <Virtuoso
         ref={ref}
         style={{ flex: 1 }}
-        initialTopMostItemIndex={messages.length - 1}
-        followOutput={(isAtBottom) => {
-          if (isMyOwnMessage.current) {
-            // if the user has scrolled away and sends a message, bring him to the bottom instantly
-            return isAtBottom ? 'smooth' : 'auto'
-          } else {
-            // a message from another user has been received - don't pull to bottom unless already there
-            return isAtBottom ? 'smooth' : false
-          }
-        }}
+        // initialTopMostItemIndex={messages.length - 1}
         itemContent={row}
         data={messages}
+        atBottomStateChange={onBottom}
       />
       <TextWrapper style={{ flex: 0, minHeight: 30 }}>
         <form
@@ -133,20 +129,22 @@ const heightMap = {
   // 125: '80px',
   // 125: '80px',
   // 125: '100px',--
-  126: '100px',
+  // 126: '100px',
   // 127: '70px',
   // 128: '150px',
   // 129: '80px',
 }
 
-const data = Array.from({ length: 130 }, (_ , index) => ({
+const getData = (num : number) => Array.from({ length: num }, (_ , index) => ({
   id: faker.random.number({ min: 1, max: 2 }).toString(),
   message: faker.lorem.sentences(),
-  height : heightMap[index] || '200px'
+  height : heightMap[index] || '100px'
 }))
 
+const Initial_Count = 10
+
 export default function App() {
-  const [messages, setMessages] = React.useState(data)
+  const [messages, setMessages] = React.useState(getData(Initial_Count))
   const userId = '1'
   return (
     <div

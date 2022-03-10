@@ -51,8 +51,9 @@ export const upwardScrollFixSystem = u.system(
                 }
               }
 
+              // console.log('lastJumpDueToItemResize deviationOffset000 newDev', newDev)
               if (newDev !== 0) {
-                console.log('lastJumpDueToItemResize deviationOffset111', lastJumpDueToItemResize)
+                // console.log('lastJumpDueToItemResize deviationOffset111 lasJmp', lastJumpDueToItemResize)
                 newDev += lastJumpDueToItemResize
               }
             }
@@ -68,7 +69,7 @@ export const upwardScrollFixSystem = u.system(
           return !scrollingInProgress && scrollTop !== 0 && scrollDirection === UP // && (isAtBottom ? amount > 0 : true)
         }),
         u.map(([[amount], , , , log]) => {
-          console.log('lastJumpDueToItemResize deviationOffset222', amount)
+          // console.log('lastJumpDueToItemResize deviationOffset222', amount)
           log('Upward scrolling compensation', { amount }, LogLevel.DEBUG)
           return amount
         })
@@ -95,11 +96,15 @@ export const upwardScrollFixSystem = u.system(
       ),
       (offset) => {
         if (offset > 0) {
+          // console.log('reset offset > 0', offset)
+
           // 不管如何scrollBy都要向上滑
           u.publish(scrollBy, { top: -offset, behavior: 'auto' })
           u.publish(deviation, 0)
         } else {
           // offset为负数说明margintop为负；先恢复margin再scrollBy下滑
+          // console.log('reset offset <= 0', offset)
+
           u.publish(deviation, 0)
           u.publish(scrollBy, { top: -offset, behavior: 'auto' })
         }

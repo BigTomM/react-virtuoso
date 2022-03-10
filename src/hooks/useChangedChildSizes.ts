@@ -29,7 +29,7 @@ export default function useChangedListContentsSizes(
       ? scrollContainerStateCallback([Math.max(scrollTop, 0), customScrollParent.scrollHeight])
       : scrollContainerStateCallback([Math.max(scrollTop, 0), scrollableElement.scrollHeight])
     if (ranges !== null) {
-      console.log('sizeStateReducer001 >> ranges', ranges)
+      // console.log('sizeStateReducer001 >> ranges', ranges)
 
       callback(ranges)
     }
