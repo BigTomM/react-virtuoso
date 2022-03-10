@@ -95,9 +95,11 @@ export const upwardScrollFixSystem = u.system(
       ),
       (offset) => {
         if (offset > 0) {
+          // 不管如何scrollBy都要向上滑
           u.publish(scrollBy, { top: -offset, behavior: 'auto' })
           u.publish(deviation, 0)
         } else {
+          // offset为负数说明margintop为负；先恢复margin再scrollBy下滑
           u.publish(deviation, 0)
           u.publish(scrollBy, { top: -offset, behavior: 'auto' })
         }
