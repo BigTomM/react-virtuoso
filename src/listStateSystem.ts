@@ -289,6 +289,7 @@ export const listStateSystem = u.system(
     )
 
     u.connect(u.pipe(listState, u.map(u.prop('topListHeight'))), topListHeight)
+
     u.connect(topListHeight, rangeTopListHeight)
 
     u.connect(
